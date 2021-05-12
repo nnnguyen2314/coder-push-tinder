@@ -1,9 +1,9 @@
 import customAxios from './custom-axios';
 
-export const getAll = (limit) => {
+export const getAllUsers = (limit) => {
     return customAxios.get(`/user${(limit ? `?limit=${limit}` : '')}`);
-}
+};
 
-export const get = id => {
+export const getUser = id => {
     return customAxios.get(`/user/${id}`);
-}
+};
