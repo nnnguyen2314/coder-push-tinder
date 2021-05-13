@@ -1,6 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import TinderListItem from './TinderListItem';
 import {
+    CardContent,
     makeStyles
 } from "@material-ui/core";
 import { Swipeable, direction } from 'react-deck-swiper';
@@ -10,6 +11,14 @@ import {getAllUsers} from "../../services/tinderService";
 import Grid from "@material-ui/core/Grid";
 import TinderdButtons from "./TinderButtons";
 import Typography from "@material-ui/core/Typography";
+import Modal from "@material-ui/core/Modal";
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import Slide from "@material-ui/core/Slide";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import useTheme from "@material-ui/core/styles/useTheme";
 
 const useStyles = makeStyles((theme) => ({
     tinderList: {
@@ -29,9 +38,16 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
+
+
 const TinderList = () => {
     const classes = useStyles();
+    const theme = useTheme();
     const [loading, setLoading] = useState(false);
+    const [dialogOpen, setDialogOpen] = React.useState(false);
     const [lastSwipeDirection, setLastSwipeDirection] = React.useState(null);
     const [users, setUsers] = useState([]);
     const [likedUsers, setLikedUsers] = useState([]);
@@ -48,15 +64,20 @@ const TinderList = () => {
 
     const handleOnSwipe = (swipeDirection) => {
         if (swipeDirection === direction.RIGHT) {
-            setLastSwipeDirection('like someone!');
+            setLastSwipeDirection('Looks like you have just swiped to like someone!');
             setLikedUsers(prevState => [...prevState, users[0]]);
-        }
-        if (swipeDirection === direction.LEFT) {
-            setLastSwipeDirection('left');
         }
         setUsers((prev) => {
             return prev.slice(1);
         });
+    };
+
+    const handleOpenDialog = () => {
+        setDialogOpen(true);
+    };
+
+    const handleCloseDialog = () => {
+        setDialogOpen(false);
     };
 
     return (
@@ -65,18 +86,15 @@ const TinderList = () => {
                 users.length > 0 && (
                     <Grid item xs={12} className={`${classes.mt2} ${classes.tinderList}`}>
                         {
-                            lastSwipeDirection
-                                ? (
-                                    <Typography variant="body1">
-                                        {'Looks like you have just swiped to '}
-                                        {lastSwipeDirection}
-                                    </Typography>
-                                )
-                                : (
-                                    <Typography variant="body1">
-                                        Try swiping the card below!
-                                    </Typography>
-                                )
+                            likedUsers.length > 0 &&
+                            (
+                                <Typography variant="body1">
+                                    {lastSwipeDirection}
+                                    <Button variant="outlined" color="primary" onClick={handleOpenDialog}>
+                                        View Persons who you liked
+                                    </Button>
+                                </Typography>
+                            )
                         }
                     </Grid>
                 )
@@ -97,8 +115,32 @@ const TinderList = () => {
                     </Swipeable>
                 </Grid>
             )}
+            <Dialog
+                TransitionComponent={Transition}
+                keepMounted
+                open={dialogOpen}
+                onClose={handleCloseDialog}
+                aria-labelledby="alert-dialog-slide-title"
+                aria-describedby="alert-dialog-slide-description"
+                fullScreen={useMediaQuery(theme.breakpoints.down('sm'))}
+            >
+                <DialogTitle id="alert-dialog-slide-title">
+                    <Typography gutterBottom variant="h4" component="h3">
+                        Who you liked
+                    </Typography>
+                </DialogTitle>
+                <DialogContent>
+                    <Grid container spacing={3} className={classes.tinderList}>
+                        {likedUsers && likedUsers.map((usr, index) => (
+                            <Grid item xs={12} className={`${classes.mt2} ${classes.tinderList}`}>
+                                <TinderListItem key={index} pictureUrl={usr.picture} title={usr.title} fullName={`${usr.firstName} ${usr.lastName}`} />
+                            </Grid>
+                        ))}
+                    </Grid>
+                </DialogContent>
+            </Dialog>
         </Grid>
     )
-}
+};
 
 export default TinderList;
