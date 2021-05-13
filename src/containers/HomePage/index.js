@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import {getAllUsers, getUser} from '../../services/tinderService';
+import TinderList from "../../components/TinderList";
+import {makeStyles} from "@material-ui/core";
 
-const UserCardList = () => {
-    const [users, setUsers] = useState([]);
-    useEffect(() => {
-        async function fetchData() {
-            const req = await getAllUsers();
-            setUsers(req.data);
-        }
+const useStyles = makeStyles((theme) => ({
+    container: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center"
+    }
+}));
 
-        fetchData();
-    }, []);
-
-    console.log(users);
+const HomePage = () => {
+    const classes = useStyles()
+    return (
+        <div className={classes.container}>
+            <TinderList />
+        </div>
+    );
 };
 
-export default UserCardList;
+export default HomePage;

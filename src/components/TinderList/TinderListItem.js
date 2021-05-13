@@ -12,7 +12,7 @@ import DislikeIcon from '@material-ui/icons/HighlightOff';
 import {useCallback, useState} from "react";
 
 const useStyles = makeStyles((theme) => ({
-    root: {
+    tinderItemContentCard: {
         maxWidth: 345,
     },
     media: {
@@ -56,31 +56,33 @@ const TinderListItem = (props) => {
     );
 
     return (
-        <Card className={classes.root}>
-            <CardActionArea>
-                <CardMedia
-                    className={classes.media}
-                    image={pictureUrl ? pictureUrl : ''}
-                    title={fullName}
-                />
-                <CardContent>
-                    <Typography gutterBottom variant="h6" component="h6">
-                        {capitalize(`${title}. ${fullName}`)}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p">
+        <div className="item-content">
+            <Card className={classes.tinderItem}>
+                <CardActionArea>
+                    <CardMedia
+                        className={classes.media}
+                        image={pictureUrl ? pictureUrl : ''}
+                        title={fullName}
+                    />
+                    <CardContent>
+                        <Typography gutterBottom variant="h6" component="h6">
+                            {capitalize(`${title}. ${fullName}`)}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary" component="p">
 
-                    </Typography>
-                </CardContent>
-            </CardActionArea>
-            <CardActions disableSpacing>
-                <IconButton aria-label="Like">
-                    <FavoriteIcon />
-                </IconButton>
-                <IconButton aria-label="Dislike">
-                    <DislikeIcon />
-                </IconButton>
-            </CardActions>
-        </Card>
+                        </Typography>
+                    </CardContent>
+                </CardActionArea>
+                <CardActions disableSpacing>
+                    <IconButton aria-label="Like">
+                        <FavoriteIcon />
+                    </IconButton>
+                    <IconButton aria-label="Dislike">
+                        <DislikeIcon />
+                    </IconButton>
+                </CardActions>
+            </Card>
+        </div>
     )
 }
 
