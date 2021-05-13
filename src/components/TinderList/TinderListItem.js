@@ -1,3 +1,4 @@
+import React, {useCallback, useState} from "react";
 import {
     Card,
     CardMedia,
@@ -7,35 +8,24 @@ import {
     makeStyles, CardActions, CardActionArea,
     capitalize
 } from "@material-ui/core";
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import DislikeIcon from '@material-ui/icons/HighlightOff';
-import {useCallback, useState} from "react";
 
-const useStyles = makeStyles((theme) => ({
-    tinderItemContentCard: {
-        maxWidth: 345,
+const useStyles = makeStyles({
+    root: {
+        maxWidth: 600,
     },
     media: {
-        height: 0,
-        paddingTop: '56.25%', // 16:9
+        minWidth: 400,
+        height: "auto",
+        minHeight: 450,
+        paddingTop: '56.25%',
     },
-    content: {
-        position: 'absolute',
-        zIndex: 2,
-        bottom: 0,
-        width: '100%',
+    cardMedia: {
+        objectFit: 'cover',
+        objectPosition: 'top',
+        userSelect: 'none',
+        pointerEvents: 'none',
     },
-    expand: {
-        transform: 'rotate(0deg)',
-        marginLeft: 'auto',
-        transition: theme.transitions.create('transform', {
-            duration: theme.transitions.duration.shortest,
-        }),
-    },
-    expandOpen: {
-        transform: 'rotate(180deg)',
-    },
-}));
+});
 
 const TinderListItem = (props) => {
     const classes = useStyles();
@@ -56,33 +46,22 @@ const TinderListItem = (props) => {
     );
 
     return (
-        <div className="item-content">
-            <Card className={classes.tinderItem}>
-                <CardActionArea>
-                    <CardMedia
-                        className={classes.media}
-                        image={pictureUrl ? pictureUrl : ''}
-                        title={fullName}
-                    />
-                    <CardContent>
-                        <Typography gutterBottom variant="h6" component="h6">
-                            {capitalize(`${title}. ${fullName}`)}
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary" component="p">
-
-                        </Typography>
-                    </CardContent>
-                </CardActionArea>
-                <CardActions disableSpacing>
-                    <IconButton aria-label="Like">
-                        <FavoriteIcon />
-                    </IconButton>
-                    <IconButton aria-label="Dislike">
-                        <DislikeIcon />
-                    </IconButton>
-                </CardActions>
-            </Card>
-        </div>
+        <Card className={classes.root}>
+            <CardActionArea>
+                <CardMedia
+                    className={classes.media}
+                    image={pictureUrl ? pictureUrl : ''}
+                    title={fullName}
+                />
+                <CardContent>
+                    <Typography gutterBottom variant="h6" component="h3">
+                        {capitalize(`${fullName}`)}
+                    </Typography>
+                    <Typography variant="body1" color="textSecondary" component="p">
+                    </Typography>
+                </CardContent>
+            </CardActionArea>
+        </Card>
     )
 }
 

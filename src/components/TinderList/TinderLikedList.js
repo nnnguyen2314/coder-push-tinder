@@ -48,7 +48,7 @@ const TinderList = () => {
 
     const handleOnSwipe = (swipeDirection) => {
         if (swipeDirection === direction.RIGHT) {
-            setLastSwipeDirection('like someone!');
+            setLastSwipeDirection('You just like someone!');
             setLikedUsers(prevState => [...prevState, users[0]]);
         }
         if (swipeDirection === direction.LEFT) {
@@ -70,6 +70,7 @@ const TinderList = () => {
                                     <Typography variant="body1">
                                         {'Looks like you have just swiped to '}
                                         {lastSwipeDirection}
+                                        ? 🔮
                                     </Typography>
                                 )
                                 : (
@@ -86,7 +87,10 @@ const TinderList = () => {
                 <Grid item xs={12} className={`${classes.mt2} ${classes.tinderList}`}>
                     <Swipeable
                         onSwipe={handleOnSwipe}
-                        renderButtons={({right, left}) => (
+                        renderButtons={({
+                                            right,
+                                            left,
+                                        }) => (
                             <TinderdButtons
                                 right={right}
                                 left={left}

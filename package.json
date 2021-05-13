@@ -39,10 +39,8 @@
     ]
   },
   "devDependencies": {
-    "@sandstreamdev/react-swipeable-list": "^1.0.1",
     "axios": "^0.21.1",
-    "framer": "^1.2.30",
-    "framer-motion": "^4.1.16",
+    "react-deck-swiper": "^1.0.9",
     "react-transition-group": "^4.4.1"
   }
 }

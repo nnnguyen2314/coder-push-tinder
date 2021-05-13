@@ -5,15 +5,14 @@ import {makeStyles} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     container: {
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center"
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
     }
 }));
 
 const HomePage = () => {
-    const classes = useStyles()
+    const classes = useStyles();
     return (
         <div className={classes.container}>
             <TinderList />
