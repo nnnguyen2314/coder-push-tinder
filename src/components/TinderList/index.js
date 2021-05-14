@@ -67,7 +67,7 @@ const TinderList = () => {
     const doLiking = () => {
         dispatch({ type: DO_LIKE, payload: state.suggestions[0] });
     };
-    const doUnliking = () => {;
+    const doUnliking = () => {
         dispatch({ type: DO_UNLIKE, payload: state.suggestions[0] });
     };
 
@@ -81,32 +81,12 @@ const TinderList = () => {
         dispatch({ type: FETCH_SUGGESTIONS_SUCCESS, payload: state.suggestions.slice(1)});
     };
 
-    // const handleOpenDialog = () => {
-    //     setDialogOpen(true);
-    // };
-
-    const handleCloseDialog = () => {
-        setDialogOpen(false);
-    };
-
     return (
         <Grid container spacing={3} className={classes.centerContent}>
             <Grid item xs={12} className={`${classes.mt5} ${classes.centerContent}`}>
                 <Typography variant="h4">
                     Hello CoderPush
                 </Typography>
-            </Grid>
-            <Grid item xs={12} className={`${classes.mt2} ${classes.centerContent}`}>
-                {
-                    state.likedHistoryList && state.likedHistoryList.length > 0 &&
-                    (
-                        <div>
-                            <Typography variant="body1">
-                                {state.likedHistoryList.length}
-                            </Typography>
-                        </div>
-                    )
-                }
             </Grid>
             {loading && (<CircularProgress color="secondary" />)}
             {state.suggestions && state.suggestions.length > 0 &&  (
@@ -126,33 +106,6 @@ const TinderList = () => {
                     </Swipeable>
                 </Grid>
             )}
-            {/*<Dialog*/}
-            {/*    TransitionComponent={Transition}*/}
-            {/*    keepMounted*/}
-            {/*    open={dialogOpen}*/}
-            {/*    onClose={handleCloseDialog}*/}
-            {/*    aria-labelledby="alert-dialog-slide-title"*/}
-            {/*    aria-describedby="alert-dialog-slide-description"*/}
-            {/*    fullScreen*/}
-            {/*>*/}
-            {/*    <DialogTitle id="alert-dialog-slide-title" onClose={handleCloseDialog}>*/}
-            {/*        <Typography gutterBottom variant="h4">*/}
-            {/*            Who you liked*/}
-            {/*        </Typography>*/}
-            {/*    </DialogTitle>*/}
-            {/*    <DialogContent dividers>*/}
-            {/*        <Grid container spacing={3}>*/}
-            {/*            {state.likedHistoryList && state.likedHistoryList.map((usr, index) => (*/}
-            {/*                <Grid key={index} item xs={12}>*/}
-            {/*                    <TinderListItem key={usr.id} pictureUrl={usr.picture} title={usr.title} fullName={`${usr.firstName} ${usr.lastName}`} />*/}
-            {/*                </Grid>*/}
-            {/*            ))}*/}
-            {/*        </Grid>*/}
-            {/*    </DialogContent>*/}
-            {/*    <Button autoFocus onClick={handleCloseDialog} color="primary">*/}
-            {/*        Close*/}
-            {/*    </Button>*/}
-            {/*</Dialog>*/}
         </Grid>
     )
 };
