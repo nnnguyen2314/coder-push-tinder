@@ -15,7 +15,6 @@ const useStyles = makeStyles({
     },
     media: {
         minWidth: 400,
-        height: "auto",
         minHeight: 450,
         paddingTop: '56.25%',
     },
@@ -31,19 +30,6 @@ const TinderListItem = (props) => {
     const classes = useStyles();
 
     const {id, pictureUrl, title, fullName, gender, location} = props;
-    const {likeStatus, setLikeStatus} = useState(false);
-    const {dislikeStatus, setDislikeStatus} = useState(false);
-
-    const doLiking = useCallback(
-        (evt) => {
-            setLikeStatus(!likeStatus);
-        }, [setLikeStatus]
-    );
-    const doDisliking = useCallback(
-        (evt) => {
-            setDislikeStatus(!likeStatus);
-        }, [setDislikeStatus]
-    );
 
     return (
         <Card className={classes.root}>

@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const TinderdButtons = ({right, left}) => {
+const TinderButtons = ({right, left}) => {
     const classes = useStyles();
 
     return (
@@ -56,4 +56,4 @@ const TinderdButtons = ({right, left}) => {
     );
 };
 
-export default TinderdButtons;
+export default TinderButtons;

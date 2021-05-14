@@ -40,6 +40,7 @@
   },
   "devDependencies": {
     "axios": "^0.21.1",
+    "clsx": "^1.1.1",
     "react-deck-swiper": "^1.0.9",
     "react-transition-group": "^4.4.1"
   }
