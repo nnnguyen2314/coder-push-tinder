@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer, useState} from 'react';
+import React, {useEffect} from 'react';
 import Grid from "@material-ui/core/Grid";
 import {
     Card,
@@ -9,12 +9,14 @@ import {
     CardActionArea,
     capitalize
 } from "@material-ui/core";
-import {initialState, tinderReducer} from "../../store/reducer";
-import {
-    FETCH_LIKED_HISTORY,
-} from '../../store/actions'
+
+import {TinderContext} from "../../contexts/Tinder";
 
 const useStyles = makeStyles((theme) => ({
+    media: {
+        height: 0,
+        paddingTop: '56.25%', // 16:9
+    },
     centerContent: {
         justifyContent: 'center',
         flexDirection: 'column',
@@ -34,31 +36,35 @@ const useStyles = makeStyles((theme) => ({
 
 const LikedHistoryList = () => {
     const classes = useStyles();
-    const [state, dispatch] = useReducer(tinderReducer, initialState);
-    useEffect(() => {
-        dispatch({ type: FETCH_LIKED_HISTORY });
-    }, []);
+    const [ state, dispatch ] = React.useContext(TinderContext);
 
     return (
         <Grid container spacing={3} className={classes.centerContent}>
-            <Grid item xs={12} className={`${classes.mt5} ${classes.centerContent}`}>
+            <Grid container item xs={12} className={`${classes.mt5} ${classes.centerContent}`}>
                 <Typography variant="h4">
-                    Hello CoderPush
+                    Coder Push History
                 </Typography>
             </Grid>
-            <Grid item xs={12} className={`${classes.mt2} ${classes.centerContent}`}>
-                <Grid container spacing={3}>
+            <Grid container item xs={12} className={`${classes.mt2} ${classes.centerContent}`}>
+                <Grid
+                    container
+                    spacing={3}
+                    direction="row"
+                    justify="center"
+                    alignItems="center"
+                >
                     {state.likedHistoryList && state.likedHistoryList.map((usr, index) => (
-                        <Grid key={index} item xs={12}>
+                        <Grid key={index} item justify="center" alignItems="center">
                             <Card>
                                 <CardActionArea>
                                     <CardMedia
-                                        image={usr.pictureUrl ? usr.pictureUrl : ''}
-                                        title={usr.fullName}
+                                        className={classes.media}
+                                        image={usr.picture ? usr.picture : ''}
+                                        title={`${usr.firstName} ${usr.lastName}`}
                                     />
                                     <CardContent>
                                         <Typography gutterBottom variant="h6" component="h3">
-                                            {capitalize(`${usr.fullName}`)}
+                                            {capitalize(`${usr.firstName} ${usr.lastName}`)}
                                         </Typography>
                                     </CardContent>
                                 </CardActionArea>

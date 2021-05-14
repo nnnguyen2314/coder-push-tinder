@@ -12,7 +12,7 @@ export const initialState = {
     suggestions: [],
     likedHistoryList: [],
     recentUnliked: null,
-}
+};
 
 export const tinderReducer = (state, {type, payload}) => {
     switch (type) {

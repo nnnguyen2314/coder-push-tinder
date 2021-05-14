@@ -29,21 +29,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const TinderButtons = ({right, left, restoreUnliked}) => {
+const TinderButtons = ({right, left}) => {
     const classes = useStyles();
 
     return (
         <Grid container justify="space-between" className={classes.root}>
-            <Grid item xs={4} className={classes.btnCenterContainer}>
-                <IconButton
-                    onCLick={restoreUnliked}
-                    aria-label="restore"
-                    className={classes.btn}
-                >
-                    <SettingsBackupRestoreIcon fontSize="large" />
-                </IconButton>
-            </Grid>
-            <Grid item xs={4} className={classes.btnCenterContainer}>
+            <Grid item xs={6} className={classes.btnCenterContainer}>
                 <IconButton
                     onClick={left}
                     aria-label="dislike"
@@ -52,7 +43,7 @@ const TinderButtons = ({right, left, restoreUnliked}) => {
                     <DislikeIcon color="secondary" fontSize="large" />
                 </IconButton>
             </Grid>
-            <Grid item xs={4} className={classes.btnCenterContainer}>
+            <Grid item xs={6} className={classes.btnCenterContainer}>
                 <IconButton
                     onClick={right}
                     aria-label="like"

@@ -15,7 +15,6 @@ import Dialog from "@material-ui/core/Dialog";
 import Slide from "@material-ui/core/Slide";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
-import {initialState, tinderReducer} from "../../store/reducer";
 import {
     FETCH_SUGGESTIONS_INIT,
     FETCH_SUGGESTIONS_SUCCESS,
@@ -23,6 +22,7 @@ import {
     DO_UNLIKE,
     DO_RESTORE_LAST_UNLIKED,
 } from '../../store/actions';
+import {TinderContext} from "../../contexts/Tinder";
 
 const useStyles = makeStyles((theme) => ({
     centerContent: {
@@ -51,8 +51,7 @@ const TinderList = () => {
     const [loading, setLoading] = useState(false);
     const [dialogOpen, setDialogOpen] = React.useState(false);
     const [lastSwipeDirection, setLastSwipeDirection] = React.useState(null);
-
-    const [state, dispatch] = useReducer(tinderReducer, initialState);
+    const [ state, dispatch ] = React.useContext(TinderContext);
 
     useEffect(() => {
         setLoading(true);
@@ -66,15 +65,10 @@ const TinderList = () => {
     }, []);
 
     const doLiking = () => {
-        setLastSwipeDirection('Looks like you have just swiped to like someone!');
         dispatch({ type: DO_LIKE, payload: state.suggestions[0] });
     };
-    const doUnliking = () => {
-        setLastSwipeDirection('Looks like you have just swiped to unlike someone!');
+    const doUnliking = () => {;
         dispatch({ type: DO_UNLIKE, payload: state.suggestions[0] });
-    };
-    const doRestoreRecentUnliked = () => {
-        dispatch({ type: DO_RESTORE_LAST_UNLIKED });
     };
 
     const handleOnSwipe = (swipeDirection) => {
@@ -87,9 +81,9 @@ const TinderList = () => {
         dispatch({ type: FETCH_SUGGESTIONS_SUCCESS, payload: state.suggestions.slice(1)});
     };
 
-    const handleOpenDialog = () => {
-        setDialogOpen(true);
-    };
+    // const handleOpenDialog = () => {
+    //     setDialogOpen(true);
+    // };
 
     const handleCloseDialog = () => {
         setDialogOpen(false);
@@ -98,32 +92,29 @@ const TinderList = () => {
     return (
         <Grid container spacing={3} className={classes.centerContent}>
             <Grid item xs={12} className={`${classes.mt5} ${classes.centerContent}`}>
-                <Typography variant="h4" component="h4">
+                <Typography variant="h4">
                     Hello CoderPush
                 </Typography>
             </Grid>
             <Grid item xs={12} className={`${classes.mt2} ${classes.centerContent}`}>
                 {
-                    state.likedHistoryList.length > 0 &&
+                    state.likedHistoryList && state.likedHistoryList.length > 0 &&
                     (
                         <div>
                             <Typography variant="body1">
-                                {lastSwipeDirection}
+                                {state.likedHistoryList.length}
                             </Typography>
-                            <Button variant="outlined" color="primary" onClick={handleOpenDialog}>
-                                View Persons who you liked
-                            </Button>
                         </div>
                     )
                 }
             </Grid>
             {loading && (<CircularProgress color="secondary" />)}
-            {state.suggestions.length > 0 &&  (
+            {state.suggestions && state.suggestions.length > 0 &&  (
                 <Grid item xs={12} className={`${classes.mt2} ${classes.centerContent}`}>
                     <Swipeable
                         onSwipe={handleOnSwipe}
                         renderButtons={({right, left}) => (
-                            <TinderButtons right={right} left={left} restoreUnliked={doRestoreRecentUnliked}/>
+                            <TinderButtons right={right} left={left} />
                         )}
                     >
                         <TinderListItem
@@ -135,33 +126,33 @@ const TinderList = () => {
                     </Swipeable>
                 </Grid>
             )}
-            <Dialog
-                TransitionComponent={Transition}
-                keepMounted
-                open={dialogOpen}
-                onClose={handleCloseDialog}
-                aria-labelledby="alert-dialog-slide-title"
-                aria-describedby="alert-dialog-slide-description"
-                fullScreen
-            >
-                <DialogTitle id="alert-dialog-slide-title" onClose={handleCloseDialog}>
-                    <Typography gutterBottom variant="h4" component="h4">
-                        Who you liked
-                    </Typography>
-                </DialogTitle>
-                <DialogContent dividers>
-                    <Grid container spacing={3}>
-                        {state.likedHistoryList && state.likedHistoryList.map((usr, index) => (
-                            <Grid key={index} item xs={12}>
-                                <TinderListItem key={usr.id} pictureUrl={usr.picture} title={usr.title} fullName={`${usr.firstName} ${usr.lastName}`} />
-                            </Grid>
-                        ))}
-                    </Grid>
-                </DialogContent>
-                <Button autoFocus onClick={handleCloseDialog} color="primary">
-                    Close
-                </Button>
-            </Dialog>
+            {/*<Dialog*/}
+            {/*    TransitionComponent={Transition}*/}
+            {/*    keepMounted*/}
+            {/*    open={dialogOpen}*/}
+            {/*    onClose={handleCloseDialog}*/}
+            {/*    aria-labelledby="alert-dialog-slide-title"*/}
+            {/*    aria-describedby="alert-dialog-slide-description"*/}
+            {/*    fullScreen*/}
+            {/*>*/}
+            {/*    <DialogTitle id="alert-dialog-slide-title" onClose={handleCloseDialog}>*/}
+            {/*        <Typography gutterBottom variant="h4">*/}
+            {/*            Who you liked*/}
+            {/*        </Typography>*/}
+            {/*    </DialogTitle>*/}
+            {/*    <DialogContent dividers>*/}
+            {/*        <Grid container spacing={3}>*/}
+            {/*            {state.likedHistoryList && state.likedHistoryList.map((usr, index) => (*/}
+            {/*                <Grid key={index} item xs={12}>*/}
+            {/*                    <TinderListItem key={usr.id} pictureUrl={usr.picture} title={usr.title} fullName={`${usr.firstName} ${usr.lastName}`} />*/}
+            {/*                </Grid>*/}
+            {/*            ))}*/}
+            {/*        </Grid>*/}
+            {/*    </DialogContent>*/}
+            {/*    <Button autoFocus onClick={handleCloseDialog} color="primary">*/}
+            {/*        Close*/}
+            {/*    </Button>*/}
+            {/*</Dialog>*/}
         </Grid>
     )
 };

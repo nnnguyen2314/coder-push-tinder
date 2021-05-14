@@ -1,6 +1,5 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import Drawer from '@material-ui/core/Drawer';
-import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import HomeIcon from '@material-ui/icons/Home';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -14,6 +13,7 @@ import HistoryIcon from '@material-ui/icons/History';
 import ListItem from "@material-ui/core/ListItem";
 import {useTheme} from "@material-ui/core";
 import {NavLink} from "react-router-dom";
+import IconButton from "@material-ui/core/IconButton";
 
 const useStyles = makeStyles((theme) => ({
     drawer: {
@@ -87,9 +87,17 @@ export default function SideBar() {
                 })}>
                     {
                         !isOpen ? (
-                            <MenuIcon style={{marginLeft: 8}} onClick={handleDrawerOpen} />
+                            <IconButton
+                                onClick={handleDrawerOpen}
+                            >
+                                <MenuIcon style={{marginLeft: 8}} />
+                            </IconButton>
                         ) : (
-                            <MenuOpenIcon onClick={handleDrawerClose} />
+                            <IconButton
+                                onClick={handleDrawerClose}
+                            >
+                                <MenuOpenIcon />
+                            </IconButton>
                         )
                     }
                 </div>
