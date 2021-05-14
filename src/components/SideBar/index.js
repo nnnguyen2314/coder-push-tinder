@@ -3,62 +3,104 @@ import Drawer from '@material-ui/core/Drawer';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import HomeIcon from '@material-ui/icons/Home';
-import AppsIcon from '@material-ui/icons/Apps';
+import MenuIcon from '@material-ui/icons/Menu';
+import MenuOpenIcon from '@material-ui/icons/MenuOpen';
 import List from '@material-ui/core/List';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from "clsx";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItem from "@material-ui/core/ListItem";
+import {useTheme} from "@material-ui/core";
+import {NavLink, useHistory} from "react-router-dom";
 
-const useStyles = makeStyles({
-    list: {
-        width: 250,
+const useStyles = makeStyles((theme) => ({
+    drawer: {
+        width: 240,
+        flexShrink: 0,
+        whiteSpace: 'nowrap',
     },
-    fullList: {
-        width: 'auto',
+    drawerOpen: {
+        width: 240,
+        transition: theme.transitions.create('width', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
     },
-});
+    drawerClose: {
+        transition: theme.transitions.create('width', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+        overflowX: 'hidden',
+        width: theme.spacing(7) + 1,
+        [theme.breakpoints.up('sm')]: {
+            width: theme.spacing(9) + 1,
+        },
+    },
+    toolbar: {
+        display: 'flex',
+        alignItems: 'center',
+        padding: theme.spacing(0, 1),
+        ...theme.mixins.toolbar,
+    },
+    contentAlignLeft: {
+        justifyContent: 'flex-start',
+    },
+    contentAlignRight: {
+        justifyContent: 'flex-end',
+    },
+}));
 
-export default function TemporaryDrawer() {
+export default function SideBar() {
     const classes = useStyles();
-    const [state, setState] = useState({
-        left: false
-    });
+    const theme = useTheme();
+    const [isOpen, setIsOpen] = useState(false);
+    const history = useHistory();
 
-    const toggleDrawer = (anchor, open) => (event) => {
-        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-            return;
-        }
-        setState({ ...state, [anchor]: open });
+    const handleDrawerOpen = () => {
+        setIsOpen(true);
     };
 
-    const list = (anchor) => (
-        <div
-            className={clsx(classes.list, {
-                [classes.fullList]: anchor === 'top' || anchor === 'bottom',
-            })}
-            role="presentation"
-            onClick={toggleDrawer(anchor, false)}
-            onKeyDown={toggleDrawer(anchor, false)}
-        >
-            <List>
-                <ListItem button>
-                    <ListItemIcon><HomeIcon/></ListItemIcon>
-                    <ListItemText primary="Home" />
-                </ListItem>
-            </List>
-            <Divider />
-        </div>
-    );
+    const handleDrawerClose = () => {
+        setIsOpen(false);
+    };
 
     return (
         <React.Fragment>
-            <Button onClick={toggleDrawer('left', true)}>
-                <AppsIcon/>
-            </Button>
-            <Drawer anchor='left' open={state['left']} onClose={toggleDrawer('left', false)}>
-                {list('left')}
+            <Drawer
+                variant="permanent"
+                className={clsx(classes.drawer, {
+                    [classes.drawerOpen]: isOpen,
+                    [classes.drawerClose]: !isOpen,
+                })}
+                classes={{
+                    paper: clsx({
+                        [classes.drawerOpen]: isOpen,
+                        [classes.drawerClose]: !isOpen,
+                    }),
+                }}
+            >
+                <div className={clsx(classes.toolbar, {
+                    [classes.contentAlignRight]: isOpen,
+                    [classes.contentAlignLeft]: !isOpen,
+                })}>
+                    {
+                        !isOpen ? (
+                            <MenuIcon style={{marginLeft: 8}} onClick={handleDrawerOpen} />
+                        ) : (
+                            <MenuOpenIcon onClick={handleDrawerClose} />
+                        )
+                    }
+                </div>
+                <Divider />
+                <List>
+                    <ListItem component={NavLink} to="/">
+                        <ListItemIcon><HomeIcon/></ListItemIcon>
+                        <ListItemText primary="Home" />
+                    </ListItem>
+                </List>
+                <Divider />
             </Drawer>
         </React.Fragment>
     );

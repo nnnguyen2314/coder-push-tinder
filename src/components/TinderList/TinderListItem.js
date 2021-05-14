@@ -9,7 +9,7 @@ import {
     capitalize
 } from "@material-ui/core";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     root: {
         maxWidth: 600,
     },
@@ -24,7 +24,7 @@ const useStyles = makeStyles({
         userSelect: 'none',
         pointerEvents: 'none',
     },
-});
+}));
 
 const TinderListItem = (props) => {
     const classes = useStyles();
