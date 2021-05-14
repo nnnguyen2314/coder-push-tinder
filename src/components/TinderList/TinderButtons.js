@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import DislikeIcon from '@material-ui/icons/Close';
+import SettingsBackupRestoreIcon from '@material-ui/icons/SettingsBackupRestore';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -18,36 +19,44 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'flex-end',
     },
-    btnLeft: {
+    btnCenterContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+    },
+    btn: {
         boxShadow: '0 2px 6px 0 rgb(112 125 134 / 14%)',
         backgroundColor: '#ffffff'
     },
-    btnRight: {
-        boxShadow: '0 2px 6px 0 rgb(112 125 134 / 14%)',
-        backgroundColor: '#ffffff'
-    }
 }));
 
-const TinderButtons = ({right, left}) => {
+const TinderButtons = ({right, left, restoreUnliked}) => {
     const classes = useStyles();
 
     return (
         <Grid container justify="space-between" className={classes.root}>
-            <Grid item xs={6} className={classes.btnLeftContainer}>
+            <Grid item xs={4} className={classes.btnCenterContainer}>
+                <IconButton
+                    onCLick={restoreUnliked}
+                    aria-label="restore"
+                    className={classes.btn}
+                >
+                    <SettingsBackupRestoreIcon fontSize="large" />
+                </IconButton>
+            </Grid>
+            <Grid item xs={4} className={classes.btnCenterContainer}>
                 <IconButton
                     onClick={left}
                     aria-label="dislike"
-                    className={classes.btnLeft}
+                    className={classes.btn}
                 >
                     <DislikeIcon color="secondary" fontSize="large" />
                 </IconButton>
             </Grid>
-
-            <Grid item xs={6} className={classes.btnRightContainer}>
+            <Grid item xs={4} className={classes.btnCenterContainer}>
                 <IconButton
                     onClick={right}
                     aria-label="like"
-                    className={classes.btnRight}
+                    className={classes.btn}
                 >
                     <FavoriteIcon color="primary" fontSize="large" />
                 </IconButton>

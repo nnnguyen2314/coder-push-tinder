@@ -10,9 +10,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import clsx from "clsx";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
+import HistoryIcon from '@material-ui/icons/History';
 import ListItem from "@material-ui/core/ListItem";
 import {useTheme} from "@material-ui/core";
-import {NavLink, useHistory} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     drawer: {
@@ -56,7 +57,6 @@ export default function SideBar() {
     const classes = useStyles();
     const theme = useTheme();
     const [isOpen, setIsOpen] = useState(false);
-    const history = useHistory();
 
     const handleDrawerOpen = () => {
         setIsOpen(true);
@@ -98,6 +98,10 @@ export default function SideBar() {
                     <ListItem component={NavLink} to="/">
                         <ListItemIcon><HomeIcon/></ListItemIcon>
                         <ListItemText primary="Home" />
+                    </ListItem>
+                    <ListItem component={NavLink} to="/history">
+                        <ListItemIcon><HistoryIcon/></ListItemIcon>
+                        <ListItemText primary="History" />
                     </ListItem>
                 </List>
                 <Divider />

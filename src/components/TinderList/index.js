@@ -1,7 +1,6 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 import TinderListItem from './TinderListItem';
 import {
-    CardContent,
     makeStyles
 } from "@material-ui/core";
 import { Swipeable, direction } from 'react-deck-swiper';
@@ -11,12 +10,19 @@ import {getAllUsers} from "../../services/tinderService";
 import Grid from "@material-ui/core/Grid";
 import TinderButtons from "./TinderButtons";
 import Typography from "@material-ui/core/Typography";
-import Modal from "@material-ui/core/Modal";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import Slide from "@material-ui/core/Slide";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
+import {initialState, tinderReducer} from "../../store/reducer";
+import {
+    FETCH_SUGGESTIONS_INIT,
+    FETCH_SUGGESTIONS_SUCCESS,
+    DO_LIKE,
+    DO_UNLIKE,
+    DO_RESTORE_LAST_UNLIKED,
+} from '../../store/actions';
 
 const useStyles = makeStyles((theme) => ({
     centerContent: {
@@ -40,37 +46,45 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-
 const TinderList = () => {
     const classes = useStyles();
     const [loading, setLoading] = useState(false);
     const [dialogOpen, setDialogOpen] = React.useState(false);
     const [lastSwipeDirection, setLastSwipeDirection] = React.useState(null);
-    const [users, setUsers] = useState([]);
-    const [likedUsers, setLikedUsers] = useState([]);
+
+    const [state, dispatch] = useReducer(tinderReducer, initialState);
 
     useEffect(() => {
         setLoading(true);
         async function fetchData() {
+            dispatch({ type: FETCH_SUGGESTIONS_INIT });
             const req = await getAllUsers();
-            setUsers(req.data.data);
             setLoading(false);
+            dispatch({ type: FETCH_SUGGESTIONS_SUCCESS, payload: req.data.data });
         }
         fetchData();
     }, []);
 
     const doLiking = () => {
         setLastSwipeDirection('Looks like you have just swiped to like someone!');
-        setLikedUsers(prevState => [...prevState, users[0]]);
+        dispatch({ type: DO_LIKE, payload: state.suggestions[0] });
+    };
+    const doUnliking = () => {
+        setLastSwipeDirection('Looks like you have just swiped to unlike someone!');
+        dispatch({ type: DO_UNLIKE, payload: state.suggestions[0] });
+    };
+    const doRestoreRecentUnliked = () => {
+        dispatch({ type: DO_RESTORE_LAST_UNLIKED });
     };
 
     const handleOnSwipe = (swipeDirection) => {
         if (swipeDirection === direction.RIGHT) {
             doLiking();
         }
-        setUsers((prev) => {
-            return prev.slice(1);
-        });
+        if (swipeDirection === direction.LEFT) {
+            doUnliking();
+        }
+        dispatch({ type: FETCH_SUGGESTIONS_SUCCESS, payload: state.suggestions.slice(1)});
     };
 
     const handleOpenDialog = () => {
@@ -84,13 +98,13 @@ const TinderList = () => {
     return (
         <Grid container spacing={3} className={classes.centerContent}>
             <Grid item xs={12} className={`${classes.mt5} ${classes.centerContent}`}>
-                <Typography variant="h4">
+                <Typography variant="h4" component="h4">
                     Hello CoderPush
                 </Typography>
             </Grid>
             <Grid item xs={12} className={`${classes.mt2} ${classes.centerContent}`}>
                 {
-                    likedUsers.length > 0 &&
+                    state.likedHistoryList.length > 0 &&
                     (
                         <div>
                             <Typography variant="body1">
@@ -104,15 +118,20 @@ const TinderList = () => {
                 }
             </Grid>
             {loading && (<CircularProgress color="secondary" />)}
-            {users.length > 0 &&  (
+            {state.suggestions.length > 0 &&  (
                 <Grid item xs={12} className={`${classes.mt2} ${classes.centerContent}`}>
                     <Swipeable
                         onSwipe={handleOnSwipe}
                         renderButtons={({right, left}) => (
-                            <TinderButtons right={right} left={left}/>
+                            <TinderButtons right={right} left={left} restoreUnliked={doRestoreRecentUnliked}/>
                         )}
                     >
-                        <TinderListItem key={users[0].id} pictureUrl={users[0].picture} title={users[0].title} fullName={`${users[0].firstName} ${users[0].lastName}`} />
+                        <TinderListItem
+                            key={state.suggestions[0].id}
+                            pictureUrl={state.suggestions[0].picture}
+                            title={state.suggestions[0].title}
+                            fullName={`${state.suggestions[0].firstName} ${state.suggestions[0].lastName}`}
+                        />
                     </Swipeable>
                 </Grid>
             )}
@@ -132,7 +151,7 @@ const TinderList = () => {
                 </DialogTitle>
                 <DialogContent dividers>
                     <Grid container spacing={3}>
-                        {likedUsers && likedUsers.map((usr, index) => (
+                        {state.likedHistoryList && state.likedHistoryList.map((usr, index) => (
                             <Grid key={index} item xs={12}>
                                 <TinderListItem key={usr.id} pictureUrl={usr.picture} title={usr.title} fullName={`${usr.firstName} ${usr.lastName}`} />
                             </Grid>

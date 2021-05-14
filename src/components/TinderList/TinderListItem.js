@@ -4,8 +4,8 @@ import {
     CardMedia,
     CardContent,
     Typography,
-    IconButton,
-    makeStyles, CardActions, CardActionArea,
+    makeStyles,
+    CardActionArea,
     capitalize
 } from "@material-ui/core";
 
