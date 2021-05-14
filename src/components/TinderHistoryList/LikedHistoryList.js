@@ -53,8 +53,8 @@ const LikedHistoryList = () => {
                     justify="center"
                     alignItems="center"
                 >
-                    {state.likedHistoryList && state.likedHistoryList.map((usr, index) => (
-                        <Grid key={index} item justify="center" alignItems="center">
+                    {(state.likedHistoryList && state.likedHistoryList.length > 0) ? state.likedHistoryList.map((usr, index) => (
+                        <Grid container key={index} item justify="center" alignItems="center">
                             <Card>
                                 <CardActionArea>
                                     <CardMedia
@@ -70,7 +70,12 @@ const LikedHistoryList = () => {
                                 </CardActionArea>
                             </Card>
                         </Grid>
-                    ))}
+                    )) : (
+                        <Grid item justify="center" alignItems="center">
+                            <div style={{marginTop: 5}}>You didn't like anyone</div>
+                        </Grid>
+                    )
+                    }
                 </Grid>
             </Grid>
         </Grid>

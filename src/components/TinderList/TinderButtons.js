@@ -5,7 +5,6 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import DislikeIcon from '@material-ui/icons/Close';
-import SettingsBackupRestoreIcon from '@material-ui/icons/SettingsBackupRestore';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -40,7 +39,7 @@ const TinderButtons = ({right, left}) => {
                     aria-label="dislike"
                     className={classes.btn}
                 >
-                    <DislikeIcon color="secondary" fontSize="large" />
+                    <DislikeIcon fontSize="large" />
                 </IconButton>
             </Grid>
             <Grid item xs={6} className={classes.btnCenterContainer}>

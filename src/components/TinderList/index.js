@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import TinderListItem from './TinderListItem';
 import {
     makeStyles
@@ -10,19 +10,15 @@ import {getAllUsers} from "../../services/tinderService";
 import Grid from "@material-ui/core/Grid";
 import TinderButtons from "./TinderButtons";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import Slide from "@material-ui/core/Slide";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
+
 import {
     FETCH_SUGGESTIONS_INIT,
     FETCH_SUGGESTIONS_SUCCESS,
     DO_LIKE,
     DO_UNLIKE,
-    DO_RESTORE_LAST_UNLIKED,
 } from '../../store/actions';
 import {TinderContext} from "../../contexts/Tinder";
+import CustomCircularProgress from "../shared/CustomCircularProgress";
 
 const useStyles = makeStyles((theme) => ({
     centerContent: {
@@ -42,15 +38,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-});
-
 const TinderList = () => {
     const classes = useStyles();
     const [loading, setLoading] = useState(false);
-    const [dialogOpen, setDialogOpen] = React.useState(false);
-    const [lastSwipeDirection, setLastSwipeDirection] = React.useState(null);
     const [ state, dispatch ] = React.useContext(TinderContext);
 
     useEffect(() => {
@@ -83,29 +73,44 @@ const TinderList = () => {
 
     return (
         <Grid container spacing={3} className={classes.centerContent}>
-            <Grid item xs={12} className={`${classes.mt5} ${classes.centerContent}`}>
-                <Typography variant="h4">
-                    Hello CoderPush
-                </Typography>
-            </Grid>
-            {loading && (<CircularProgress color="secondary" />)}
-            {state.suggestions && state.suggestions.length > 0 &&  (
-                <Grid item xs={12} className={`${classes.mt2} ${classes.centerContent}`}>
-                    <Swipeable
-                        onSwipe={handleOnSwipe}
-                        renderButtons={({right, left}) => (
-                            <TinderButtons right={right} left={left} />
-                        )}
-                    >
-                        <TinderListItem
-                            key={state.suggestions[0].id}
-                            pictureUrl={state.suggestions[0].picture}
-                            title={state.suggestions[0].title}
-                            fullName={`${state.suggestions[0].firstName} ${state.suggestions[0].lastName}`}
-                        />
-                    </Swipeable>
-                </Grid>
-            )}
+            {(!state.suggestions || state.suggestions.length <= 0) && loading ?
+                (
+                    <Grid item xs={12} className={`${classes.mt5} ${classes.centerContent}`}>
+                        <CustomCircularProgress />
+                    </Grid>
+                )
+                : (
+                    <Grid item xs={12} className={`${classes.mt5} ${classes.centerContent}`}>
+                        <Grid container spacing={3} className={classes.centerContent}>
+                            <Grid item xs={12} className={`${classes.mt5} ${classes.centerContent}`}>
+                                <Typography variant="h5">
+                                    Hello, Welcome to CoderPush Tinder-like!
+                                </Typography>
+                                <Typography component="p">
+                                    We found some suggestions for you here.
+                                </Typography>
+                            </Grid>
+                            {state.suggestions && state.suggestions.length > 0 &&  (
+                                <Grid item xs={12} className={`${classes.mt2} ${classes.centerContent}`}>
+                                    <Swipeable
+                                        onSwipe={handleOnSwipe}
+                                        renderButtons={({right, left}) => (
+                                            <TinderButtons right={right} left={left} />
+                                        )}
+                                    >
+                                        <TinderListItem
+                                            key={state.suggestions[0].id}
+                                            pictureUrl={state.suggestions[0].picture}
+                                            title={state.suggestions[0].title}
+                                            fullName={`${state.suggestions[0].firstName} ${state.suggestions[0].lastName}`}
+                                        />
+                                    </Swipeable>
+                                </Grid>
+                            )}
+                        </Grid>
+                    </Grid>
+                )
+            }
         </Grid>
     )
 };

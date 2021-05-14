@@ -6,18 +6,16 @@ import MenuIcon from '@material-ui/icons/Menu';
 import MenuOpenIcon from '@material-ui/icons/MenuOpen';
 import List from '@material-ui/core/List';
 import { makeStyles } from '@material-ui/core/styles';
-import clsx from "clsx";
-import ListItemText from "@material-ui/core/ListItemText";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import HistoryIcon from '@material-ui/icons/History';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import ListItem from "@material-ui/core/ListItem";
-import {useTheme} from "@material-ui/core";
 import {NavLink} from "react-router-dom";
 import IconButton from "@material-ui/core/IconButton";
+import clsx from "clsx";
 
 const useStyles = makeStyles((theme) => ({
     drawer: {
-        width: 240,
+        width: 70,
         flexShrink: 0,
         whiteSpace: 'nowrap',
     },
@@ -51,11 +49,28 @@ const useStyles = makeStyles((theme) => ({
     contentAlignRight: {
         justifyContent: 'flex-end',
     },
+    contentAlignCenter: {
+        justifyContent: 'center',
+    },
+    horizontalList: {
+        display: 'flex',
+        flexDirection: 'row',
+        padding: 0,
+    },
+    pl8: {
+      paddingLeft: 8,
+    },
+    pr8: {
+        paddingRight: 8,
+    },
+    icon: {
+        width: '1.5em',
+        height: '1.5em'
+    }
 }));
 
 export default function SideBar() {
     const classes = useStyles();
-    const theme = useTheme();
     const [isOpen, setIsOpen] = useState(false);
 
     const handleDrawerOpen = () => {
@@ -70,49 +85,24 @@ export default function SideBar() {
         <React.Fragment>
             <Drawer
                 variant="permanent"
-                className={clsx(classes.drawer, {
-                    [classes.drawerOpen]: isOpen,
-                    [classes.drawerClose]: !isOpen,
-                })}
-                classes={{
-                    paper: clsx({
-                        [classes.drawerOpen]: isOpen,
-                        [classes.drawerClose]: !isOpen,
-                    }),
-                }}
+                className={classes.drawer}
+                anchor="left"
             >
-                <div className={clsx(classes.toolbar, {
-                    [classes.contentAlignRight]: isOpen,
-                    [classes.contentAlignLeft]: !isOpen,
-                })}>
-                    {
-                        !isOpen ? (
-                            <IconButton
-                                onClick={handleDrawerOpen}
-                            >
-                                <MenuIcon style={{marginLeft: 8}} />
-                            </IconButton>
-                        ) : (
-                            <IconButton
-                                onClick={handleDrawerClose}
-                            >
-                                <MenuOpenIcon />
-                            </IconButton>
-                        )
-                    }
+                <div className={classes.toolbar}>
                 </div>
                 <Divider />
                 <List>
-                    <ListItem component={NavLink} to="/">
-                        <ListItemIcon><HomeIcon/></ListItemIcon>
-                        <ListItemText primary="Home" />
+                    <ListItem component={NavLink} to="/" className={clsx(classes.pl8, classes.pr8)}>
+                        <ListItemIcon className={classes.contentAlignCenter} title="Home">
+                            <HomeIcon color="secondary" className={classes.icon}/>
+                        </ListItemIcon>
                     </ListItem>
-                    <ListItem component={NavLink} to="/history">
-                        <ListItemIcon><HistoryIcon/></ListItemIcon>
-                        <ListItemText primary="History" />
+                    <ListItem component={NavLink} to="/history" className={clsx(classes.pl8, classes.pr8)}>
+                        <ListItemIcon className={classes.contentAlignCenter} title="Likes">
+                            <FavoriteIcon color="primary" className={classes.icon}/>
+                        </ListItemIcon>
                     </ListItem>
                 </List>
-                <Divider />
             </Drawer>
         </React.Fragment>
     );
