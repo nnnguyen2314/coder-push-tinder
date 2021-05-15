@@ -15,21 +15,23 @@ function App() {
             <TinderProvider>
                 <MuiThemeProvider theme={theme}>
                     <CssBaseline />
-                    <Grid container>
-                        <Grid item md={1} xs={12} style={{marginTop:10}}>
-                            <SideBar />
+                    <div style={{flexGrow: 1}}>
+                        <Grid container spacing={3}>
+                            <Grid item md={1} xs={12} style={{marginTop: 10, padding: 0}}>
+                                <SideBar />
+                            </Grid>
+                            <Grid item md={11} xs={12} style={{marginTop: 10, padding: 0}}>
+                                <Switch>
+                                    <Route exact  path="/">
+                                        <TinderList />
+                                    </Route>
+                                    <Route path="/history">
+                                        <LikedHistoryList />
+                                    </Route>
+                                </Switch>
+                            </Grid>
                         </Grid>
-                        <Grid item md={11} xs={12} style={{marginTop:10}}>
-                            <Switch>
-                                <Route exact  path="/">
-                                    <TinderList />
-                                </Route>
-                                <Route path="/history">
-                                    <LikedHistoryList />
-                                </Route>
-                            </Switch>
-                        </Grid>
-                    </Grid>
+                    </div>
                 </MuiThemeProvider>
             </TinderProvider>
         </BrowserRouter>
