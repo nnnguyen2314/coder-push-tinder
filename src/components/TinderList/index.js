@@ -1,8 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
 import TinderListItem from './TinderListItem';
-import {
-    makeStyles
-} from "@material-ui/core";
 import { Swipeable, direction } from 'react-deck-swiper';
 
 import {getAllUsers} from "../../services/tinderService";
@@ -18,27 +15,10 @@ import {
 } from '../../store/actions';
 import {TinderContext} from "../../contexts/Tinder";
 import CustomCircularProgress from "../shared/CustomCircularProgress";
-
-const useStyles = makeStyles((theme) => ({
-    centerContent: {
-        justifyContent: 'center',
-        flexDirection: 'column',
-        alignItems: 'center',
-        display: 'flex',
-    },
-    mt5: {
-        marginTop: theme.spacing(5),
-    },
-    mt2: {
-        marginTop: theme.spacing(2),
-    },
-    mt1: {
-        marginTop: theme.spacing(1),
-    },
-}));
+import tinderListStyles from "./tinderListStyles";
 
 const TinderList = () => {
-    const classes = useStyles();
+    const classes = tinderListStyles();
     const [loading, setLoading] = useState(false);
     const [state, dispatch] = useContext(TinderContext);
     const [shouldFetchMoreData, setShouldFetchMoreData] = useState(false);
@@ -93,9 +73,9 @@ const TinderList = () => {
                     </Grid>
                 )
                 : (
-                    <Grid item xs={12} className={`${classes.mt5} ${classes.centerContent}`}>
+                    <Grid item xs={12} className={`${classes.mt2} ${classes.centerContent}`}>
                         <Grid container spacing={3} className={classes.centerContent}>
-                            <Grid item xs={12} className={`${classes.mt5} ${classes.centerContent}`}>
+                            <Grid item xs={12} className={`${classes.mt2} ${classes.centerContent}`}>
                                 <Typography variant="h5">
                                     Hello, Welcome to CoderPush Tinder-like!
                                 </Typography>

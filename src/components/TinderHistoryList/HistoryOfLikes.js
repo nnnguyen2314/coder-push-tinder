@@ -11,6 +11,7 @@ import {
 
 import {TinderContext} from "../../contexts/Tinder";
 import historyOfLikesStyles from "./historyOfLikesStyles";
+import clsx from "clsx";
 
 const HistoryOfLikes = () => {
     const classes = historyOfLikesStyles();
@@ -18,8 +19,8 @@ const HistoryOfLikes = () => {
 
     return (
         <div className={classes.root}>
-            <Grid container className={classes.mt5} style={{marginLeft: 0, marginRight: 0, marginBottom: 0}}>
-                <Grid item xs={12} style={{padding: 0}}>
+            <Grid container className={clsx(classes.nonMargin, classes.mt2)}>
+                <Grid item xs={12} className="non-padding">
                     <Typography variant="h4">
                         Coder Push History
                     </Typography>
