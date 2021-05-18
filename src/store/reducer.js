@@ -23,7 +23,7 @@ export const tinderReducer = (state, {type, payload}) => {
                 suggestion: {
                     list: [...state.suggestion.list, ...currentSuggestions],
                     currentLimit: payload.currentLimit || 20,
-                    currentPage: payload.currentPage + 1,
+                    currentPage: state.suggestion.currentPage + 1,
                 },
             };
         case FETCH_SUGGESTIONS_FAILURE:
@@ -38,7 +38,8 @@ export const tinderReducer = (state, {type, payload}) => {
             return {
                 ...state,
                 suggestion: {
-                    list: state.suggestion.list.slice(1),
+                    ...state.suggestion,
+                    list: state.suggestion.list.slice(1)
                 },
                 likedHistoryList: [...state.likedHistoryList, payload]
             };
@@ -46,7 +47,8 @@ export const tinderReducer = (state, {type, payload}) => {
             return {
                 ...state,
                 suggestion: {
-                    list: state.suggestion.list.slice(1),
+                    ...state.suggestion,
+                    list: state.suggestion.list.slice(1)
                 },
                 recentUnliked: payload,
             };

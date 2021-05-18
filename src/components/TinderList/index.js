@@ -41,28 +41,26 @@ const TinderList = () => {
     const classes = useStyles();
     const [loading, setLoading] = useState(false);
     const [state, dispatch] = useContext(TinderContext);
-    const [shouldFetchData, setShouldFetchData] = useState(false);
+    const [shouldFetchMoreData, setShouldFetchMoreData] = useState(false);
+
+    async function fetchData() {
+        dispatch({ type: FETCH_SUGGESTIONS_INIT });
+        const req = await getAllUsers(state.suggestion.currentLimit, state.suggestion.currentPage);
+        setShouldFetchMoreData(req.data.data && req.data.data.length > 0);
+        dispatch({
+            type: FETCH_SUGGESTIONS_SUCCESS, payload: {
+                list: req.data.data
+            }
+        });
+    }
 
     useEffect(() => {
-        loadData();
-    }, [loadData]);
-
-    const loadData = () => {
-        async function fetchData() {
+        if (!state.suggestion.list || state.suggestion.list.length === 0 || (state.suggestion.list && state.suggestion.list.length === 5)) {
             setLoading(true);
-            dispatch({ type: FETCH_SUGGESTIONS_INIT });
-            const req = await getAllUsers(state.suggestion.currentLimit, state.suggestion.currentPage);
-            setShouldFetchData(req.data.data && req.data.data.length > 0);
-            dispatch({
-                type: FETCH_SUGGESTIONS_SUCCESS, payload: {
-                    list: req.data.data,
-                    currentPage: state.suggestion.currentPage + 1
-                }
-            });
+            fetchData();
             setLoading(false);
         }
-        fetchData();
-    };
+    }, []);
 
     const doLiking = () => {
         dispatch({ type: DO_LIKE, payload: state.suggestion.list[0] });
@@ -78,8 +76,8 @@ const TinderList = () => {
         if (swipeDirection === direction.LEFT) {
             doUnliking();
         }
-        if (shouldFetchData && state.suggestion.list.length <= 5) {
-            loadData();
+        if (shouldFetchMoreData && state.suggestion.list.length === 5) {
+            fetchData();
         }
     };
 

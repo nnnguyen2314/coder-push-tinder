@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 
 const LikedHistoryList = () => {
     const classes = useStyles();
-    const [ state, dispatch ] = React.useContext(TinderContext);
+    const [ state ] = React.useContext(TinderContext);
 
     return (
         <div className={classes.root}>
