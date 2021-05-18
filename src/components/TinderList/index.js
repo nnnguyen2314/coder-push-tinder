@@ -44,6 +44,7 @@ const TinderList = () => {
     const [shouldFetchMoreData, setShouldFetchMoreData] = useState(false);
 
     async function fetchData() {
+        setLoading(true);
         dispatch({ type: FETCH_SUGGESTIONS_INIT });
         const req = await getAllUsers(state.suggestion.currentLimit, state.suggestion.currentPage);
         setShouldFetchMoreData(req.data.data && req.data.data.length > 0);
@@ -52,15 +53,17 @@ const TinderList = () => {
                 list: req.data.data
             }
         });
+        setLoading(false);
     }
 
     useEffect(() => {
-        if (!state.suggestion.list || state.suggestion.list.length === 0 || (state.suggestion.list && state.suggestion.list.length === 5)) {
-            setLoading(true);
-            fetchData();
-            setLoading(false);
+        function loadData() {
+            if (!state.suggestion.list || state.suggestion.list.length === 0 || (state.suggestion.list && state.suggestion.list.length === 5)) {
+                fetchData();
+            }
         }
-    }, []);
+        loadData();
+    });
 
     const doLiking = () => {
         dispatch({ type: DO_LIKE, payload: state.suggestion.list[0] });

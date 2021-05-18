@@ -5,34 +5,15 @@ import {
     CardMedia,
     CardContent,
     Typography,
-    makeStyles,
     CardActionArea,
     capitalize
 } from "@material-ui/core";
 
 import {TinderContext} from "../../contexts/Tinder";
+import historyOfLikesStyles from "./historyOfLikesStyles";
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-    },
-    media: {
-        height: 450,
-        paddingTop: '56.25%', // 16:9
-    },
-    mt5: {
-        marginTop: theme.spacing(5),
-    },
-    mt2: {
-        marginTop: theme.spacing(2),
-    },
-    mt1: {
-        marginTop: theme.spacing(1),
-    },
-}));
-
-const LikedHistoryList = () => {
-    const classes = useStyles();
+const HistoryOfLikes = () => {
+    const classes = historyOfLikesStyles();
     const [ state ] = React.useContext(TinderContext);
 
     return (
@@ -79,4 +60,4 @@ const LikedHistoryList = () => {
     );
 };
 
-export default LikedHistoryList;
+export default HistoryOfLikes;

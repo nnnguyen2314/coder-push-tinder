@@ -1,27 +1,9 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
-const useCustomCircularProgressStyles = makeStyles((theme) => ({
-    root: {
-        position: 'relative',
-    },
-    bottom: {
-        color: theme.palette.grey[theme.palette.type === 'light' ? 200 : 700],
-    },
-    top: {
-        color: theme.palette.primary.main,
-        animationDuration: '550ms',
-        position: 'absolute',
-        left: 0,
-    },
-    circle: {
-        strokeLinecap: 'round',
-    },
-}));
+import customCircularProgressStyles from "./customCircularProgressStyles";
 
 function CustomCircularProgress(props) {
-    const classes = useCustomCircularProgressStyles();
+    const classes = customCircularProgressStyles();
 
     return (
         <div className={classes.root}>

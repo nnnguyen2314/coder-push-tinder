@@ -4,30 +4,13 @@ import {
     CardMedia,
     CardContent,
     Typography,
-    makeStyles,
     CardActionArea,
     capitalize
 } from "@material-ui/core";
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        maxWidth: 600,
-    },
-    media: {
-        minWidth: 400,
-        minHeight: 450,
-        paddingTop: '56.25%',
-    },
-    cardMedia: {
-        objectFit: 'cover',
-        objectPosition: 'top',
-        userSelect: 'none',
-        pointerEvents: 'none',
-    },
-}));
+import tinderListItemStyles from "./tinderListItemStyles";
 
 const TinderListItem = (props) => {
-    const classes = useStyles();
+    const classes = tinderListItemStyles();
 
     const {pictureUrl, fullName} = props;
 
@@ -49,6 +32,6 @@ const TinderListItem = (props) => {
             </CardActionArea>
         </Card>
     )
-}
+};
 
 export default TinderListItem;

@@ -1,35 +1,12 @@
 import React from 'react';
-
-import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import DislikeIcon from '@material-ui/icons/Close';
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        marginTop: theme.spacing(1),
-    },
-    btnLeftContainer: {
-        display: 'flex',
-        justifyContent: 'flex-start',
-    },
-    btnRightContainer: {
-        display: 'flex',
-        justifyContent: 'flex-end',
-    },
-    btnCenterContainer: {
-        display: 'flex',
-        justifyContent: 'center',
-    },
-    btn: {
-        boxShadow: '0 2px 6px 0 rgb(112 125 134 / 14%)',
-        backgroundColor: '#ffffff'
-    },
-}));
+import tinderButtonsStyles from "./tinderButtonsStyles";
 
 const TinderButtons = ({right, left}) => {
-    const classes = useStyles();
+    const classes = tinderButtonsStyles();
 
     return (
         <Grid container justify="space-between" className={classes.root}>

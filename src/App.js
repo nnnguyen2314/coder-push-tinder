@@ -7,7 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import SideBar from "./components/SideBar";
 import {TinderProvider} from "./contexts/Tinder";
 import TinderList from "./components/TinderList";
-import LikedHistoryList from "./components/TinderHistoryList/LikedHistoryList";
+import HistoryOfLikes from "./components/TinderHistoryList/HistoryOfLikes";
 
 function App() {
     return (
@@ -26,7 +26,7 @@ function App() {
                                         <TinderList />
                                     </Route>
                                     <Route path="/history">
-                                        <LikedHistoryList />
+                                        <HistoryOfLikes />
                                     </Route>
                                 </Switch>
                             </Grid>
