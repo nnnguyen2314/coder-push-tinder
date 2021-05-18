@@ -1,10 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import TinderListItem from './TinderListItem';
 import {
     makeStyles
 } from "@material-ui/core";
 import { Swipeable, direction } from 'react-deck-swiper';
-import {CircularProgress} from "@material-ui/core";
 
 import {getAllUsers} from "../../services/tinderService";
 import Grid from "@material-ui/core/Grid";
@@ -15,7 +14,7 @@ import {
     FETCH_SUGGESTIONS_INIT,
     FETCH_SUGGESTIONS_SUCCESS,
     DO_LIKE,
-    DO_UNLIKE, FETCH_LIKED_HISTORY,
+    DO_UNLIKE,
 } from '../../store/actions';
 import {TinderContext} from "../../contexts/Tinder";
 import CustomCircularProgress from "../shared/CustomCircularProgress";
@@ -41,27 +40,35 @@ const useStyles = makeStyles((theme) => ({
 const TinderList = () => {
     const classes = useStyles();
     const [loading, setLoading] = useState(false);
-    const [ state, dispatch ] = React.useContext(TinderContext);
+    const [state, dispatch] = useContext(TinderContext);
+    const [shouldFetchData, setShouldFetchData] = useState(false);
 
     useEffect(() => {
-        setLoading(true);
+        loadData();
+    }, []);
+
+    const loadData = () => {
         async function fetchData() {
+            setLoading(true);
             dispatch({ type: FETCH_SUGGESTIONS_INIT });
-            const req = await getAllUsers();
-            const currentSuggestions = req.data.data ? req.data.data.filter((d) => {
-                return !state.likedHistoryList.find (d);
-                }) : [];
-            dispatch({ type: FETCH_SUGGESTIONS_SUCCESS, payload: currentSuggestions });
+            const req = await getAllUsers(state.suggestion.currentLimit, state.suggestion.currentPage);
+            setShouldFetchData(req.data.data && req.data.data.length > 0);
+            dispatch({
+                type: FETCH_SUGGESTIONS_SUCCESS, payload: {
+                    list: req.data.data,
+                    currentPage: state.suggestion.currentPage + 1
+                }
+            });
             setLoading(false);
         }
         fetchData();
-    }, []);
+    };
 
     const doLiking = () => {
-        dispatch({ type: DO_LIKE, payload: state.suggestions[0] });
+        dispatch({ type: DO_LIKE, payload: state.suggestion.list[0] });
     };
     const doUnliking = () => {
-        dispatch({ type: DO_UNLIKE, payload: state.suggestions[0] });
+        dispatch({ type: DO_UNLIKE, payload: state.suggestion.list[0] });
     };
 
     const handleOnSwipe = (swipeDirection) => {
@@ -71,12 +78,14 @@ const TinderList = () => {
         if (swipeDirection === direction.LEFT) {
             doUnliking();
         }
-        dispatch({ type: FETCH_SUGGESTIONS_SUCCESS, payload: state.suggestions.slice(1)});
+        if (shouldFetchData && state.suggestion.list.length <= 5) {
+            loadData();
+        }
     };
 
     return (
         <Grid container spacing={3} className={classes.centerContent}>
-            {(!state.suggestions || state.suggestions.length <= 0) && loading ?
+            {(!state.suggestion.list || state.suggestion.list.length <= 0) && loading ?
                 (
                     <Grid item xs={12} className={`${classes.mt5} ${classes.centerContent}`}>
                         <CustomCircularProgress />
@@ -93,7 +102,7 @@ const TinderList = () => {
                                     We found some suggestions for you here.
                                 </Typography>
                             </Grid>
-                            {state.suggestions && state.suggestions.length > 0 &&  (
+                            {state.suggestion.list && state.suggestion.list.length > 0 &&  (
                                 <Grid item xs={12} className={`${classes.mt2} ${classes.centerContent}`}>
                                     <Swipeable
                                         onSwipe={handleOnSwipe}
@@ -102,10 +111,10 @@ const TinderList = () => {
                                         )}
                                     >
                                         <TinderListItem
-                                            key={state.suggestions[0].id}
-                                            pictureUrl={state.suggestions[0].picture}
-                                            title={state.suggestions[0].title}
-                                            fullName={`${state.suggestions[0].firstName} ${state.suggestions[0].lastName}`}
+                                            key={state.suggestion.list[0].id}
+                                            pictureUrl={state.suggestion.list[0].picture}
+                                            title={state.suggestion.list[0].title}
+                                            fullName={`${state.suggestion.list[0].firstName} ${state.suggestion.list[0].lastName}`}
                                         />
                                     </Swipeable>
                                 </Grid>

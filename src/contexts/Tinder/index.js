@@ -5,6 +5,11 @@ export const initialState = {
     suggestions: [],
     likedHistoryList: localStorage.getItem('likedHistoryList') ? JSON.parse(localStorage.getItem('likedHistoryList')) : [],
     recentUnliked: null,
+    suggestion: {
+        list: [],
+        currentPage: 0,
+        currentLimit: 20,
+    }
 };
 
 export const TinderContext = createContext({

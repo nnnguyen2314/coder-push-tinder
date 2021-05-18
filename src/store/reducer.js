@@ -14,9 +14,17 @@ export const tinderReducer = (state, {type, payload}) => {
         case FETCH_SUGGESTIONS_INIT:
             return state;
         case FETCH_SUGGESTIONS_SUCCESS:
+            const currentSuggestions = payload.list ? payload.list.filter((d) => {
+                return !state.likedHistoryList.find(l => l.id === d.id);
+            }) : [];
             return {
                 ...state,
-                suggestions: payload,
+                suggestions: currentSuggestions,
+                suggestion: {
+                    list: [...state.suggestion.list, ...currentSuggestions],
+                    currentLimit: payload.currentLimit || 20,
+                    currentPage: payload.currentPage + 1,
+                },
             };
         case FETCH_SUGGESTIONS_FAILURE:
             return state;
@@ -29,17 +37,26 @@ export const tinderReducer = (state, {type, payload}) => {
         case DO_LIKE:
             return {
                 ...state,
+                suggestion: {
+                    list: state.suggestion.list.slice(1),
+                },
                 likedHistoryList: [...state.likedHistoryList, payload]
             };
         case DO_UNLIKE:
             return {
                 ...state,
+                suggestion: {
+                    list: state.suggestion.list.slice(1),
+                },
                 recentUnliked: payload,
             };
         case DO_RESTORE_LAST_UNLIKED:
             return {
                 ...state,
                 suggestions: [...state.suggestions, state.recentUnliked],
+                suggestion: {
+                    list: [...state.suggestions, state.recentUnliked]
+                },
                 recentUnliked: null,
             };
         default:
