@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 const TinderListItem = (props) => {
     const classes = useStyles();
 
-    const {id, pictureUrl, title, fullName, gender, location, loading} = props;
+    const {pictureUrl, fullName} = props;
 
     return (
         <Card className={classes.root}>

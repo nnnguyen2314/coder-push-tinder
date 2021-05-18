@@ -11,7 +11,6 @@ import {
 } from "@material-ui/core";
 
 import {TinderContext} from "../../contexts/Tinder";
-import {FETCH_LIKED_HISTORY} from "../../store/actions";
 
 const useStyles = makeStyles((theme) => ({
     root: {

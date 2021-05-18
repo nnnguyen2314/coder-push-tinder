@@ -45,7 +45,7 @@ const TinderList = () => {
 
     useEffect(() => {
         loadData();
-    }, []);
+    }, [loadData]);
 
     const loadData = () => {
         async function fetchData() {
