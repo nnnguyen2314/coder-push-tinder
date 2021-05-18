@@ -17,10 +17,10 @@ function App() {
                     <CssBaseline />
                     <div style={{flexGrow: 1}}>
                         <Grid container spacing={3}>
-                            <Grid item md={1} xs={12} style={{marginTop: 10, padding: 0}}>
+                            <Grid item md={1} xs={12} className="mt10 non-padding">
                                 <SideBar />
                             </Grid>
-                            <Grid item md={11} xs={12} style={{marginTop: 10, padding: 0}}>
+                            <Grid item md={11} xs={12} className="mt10 non-padding">
                                 <Switch>
                                     <Route exact  path="/">
                                         <TinderList />
