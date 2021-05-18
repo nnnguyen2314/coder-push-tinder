@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 
 import {TinderContext} from "../../contexts/Tinder";
+import {FETCH_LIKED_HISTORY} from "../../store/actions";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -47,9 +48,10 @@ const LikedHistoryList = () => {
                     <Grid
                         container
                         spacing={3}
+                        justify="center" alignItems="center"
                     >
                         {(state.likedHistoryList && state.likedHistoryList.length > 0) ? state.likedHistoryList.map((usr, index) => (
-                            <Grid key={index} item justify="center" alignItems="center" xs={12} sm={6} md={4}>
+                            <Grid key={index} item xs={12} sm={6} md={4}>
                                 <Card>
                                     <CardActionArea>
                                         <CardMedia
@@ -66,7 +68,7 @@ const LikedHistoryList = () => {
                                 </Card>
                             </Grid>
                         )) : (
-                            <Grid item justify="center" alignItems="center" md={12}>
+                            <Grid item md={12}>
                                 <div style={{marginTop: 5}}>You didn't like anyone</div>
                             </Grid>
                         )

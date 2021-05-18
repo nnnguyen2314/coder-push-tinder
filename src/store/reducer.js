@@ -8,13 +8,8 @@ import {
     FETCH_LIKED_HISTORY,
 } from './actions';
 
-export const initialState = {
-    suggestions: [],
-    likedHistoryList: [],
-    recentUnliked: null,
-};
-
 export const tinderReducer = (state, {type, payload}) => {
+
     switch (type) {
         case FETCH_SUGGESTIONS_INIT:
             return state;
@@ -25,6 +20,12 @@ export const tinderReducer = (state, {type, payload}) => {
             };
         case FETCH_SUGGESTIONS_FAILURE:
             return state;
+        case FETCH_LIKED_HISTORY:
+            let storedLikedHistoryList = localStorage.getItem('likedHistoryList');
+            return {
+                ...state,
+                likedHistoryList: storedLikedHistoryList ? JSON.parse(storedLikedHistoryList) : []
+            };
         case DO_LIKE:
             return {
                 ...state,
@@ -41,8 +42,6 @@ export const tinderReducer = (state, {type, payload}) => {
                 suggestions: [...state.suggestions, state.recentUnliked],
                 recentUnliked: null,
             };
-        case FETCH_LIKED_HISTORY:
-            return state.likedHistoryList;
         default:
             return state;
     }

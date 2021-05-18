@@ -1,13 +1,23 @@
-import React from 'react';
-import {initialState, tinderReducer} from '../../store/reducer';
+import React, {useEffect, useReducer, createContext} from 'react';
+import {tinderReducer} from '../../store/reducer';
 
-export const TinderContext = React.createContext({
+export const initialState = {
+    suggestions: [],
+    likedHistoryList: localStorage.getItem('likedHistoryList') ? JSON.parse(localStorage.getItem('likedHistoryList')) : [],
+    recentUnliked: null,
+};
+
+export const TinderContext = createContext({
     state: initialState,
     dispatch: () => null
 });
 
 export const TinderProvider = ({ children }) => {
-    const [state, dispatch] = React.useReducer(tinderReducer, initialState);
+    const [state, dispatch] = useReducer(tinderReducer, initialState);
+
+    useEffect(() => {
+        localStorage.setItem("likedHistoryList", JSON.stringify(state.likedHistoryList));
+    }, [state.likedHistoryList]);
 
     return (
         <TinderContext.Provider value={[ state, dispatch ]}>

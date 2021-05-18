@@ -15,7 +15,7 @@ import {
     FETCH_SUGGESTIONS_INIT,
     FETCH_SUGGESTIONS_SUCCESS,
     DO_LIKE,
-    DO_UNLIKE,
+    DO_UNLIKE, FETCH_LIKED_HISTORY,
 } from '../../store/actions';
 import {TinderContext} from "../../contexts/Tinder";
 import CustomCircularProgress from "../shared/CustomCircularProgress";
@@ -48,8 +48,11 @@ const TinderList = () => {
         async function fetchData() {
             dispatch({ type: FETCH_SUGGESTIONS_INIT });
             const req = await getAllUsers();
+            const currentSuggestions = req.data.data ? req.data.data.filter((d) => {
+                return !state.likedHistoryList.find (d);
+                }) : [];
+            dispatch({ type: FETCH_SUGGESTIONS_SUCCESS, payload: currentSuggestions });
             setLoading(false);
-            dispatch({ type: FETCH_SUGGESTIONS_SUCCESS, payload: req.data.data });
         }
         fetchData();
     }, []);
